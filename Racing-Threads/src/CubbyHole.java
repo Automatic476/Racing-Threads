@@ -30,7 +30,7 @@ public class CubbyHole {
 				empty = false;
 				notifyAll();
 			}
-			//Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 		}
 
@@ -50,7 +50,7 @@ public class CubbyHole {
 				notifyAll();
 				return contents;
 			}
-			//Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 
 		}

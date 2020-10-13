@@ -30,7 +30,7 @@ public class Consumer extends Thread
 	public void run() 
 	{
 		int value; 
-		for (int i = 0; i < 10; i++) 
+		for (int i = 0; i < 4; i++) 
 		{
 			value = box.get();
 			System.out.println("\tConsumer #" + id 
