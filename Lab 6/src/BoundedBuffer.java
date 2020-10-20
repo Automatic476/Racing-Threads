@@ -17,6 +17,8 @@ public class BoundedBuffer {
 		int[] circularArray = new int[n];
 		int count = 0;
 		int capacity = 0;
+		int inIndex;
+		int outIndex;
 	}
 
 	/**
@@ -44,20 +46,20 @@ public class BoundedBuffer {
 	 *
 	 * @return value retrieved
 	 */
-//	public synchronized int get() {
-//		try {
-//			if (empty) {
-//				wait();
-//			} else {
-//				empty = true;
-//				notifyAll();
-//				return contents;
-//			}
-//			Thread.sleep(100);
-//		} catch (InterruptedException e) {
-//
-//		}
-//		return contents;
-//	}
+	public synchronized int get() {
+		try {
+			if (empty) {
+				wait();
+			} else {
+				empty = true;
+				notifyAll();
+				return contents;
+			}
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+
+		}
+		return contents;
+	}
 
 }

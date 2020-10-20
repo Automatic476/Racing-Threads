@@ -9,7 +9,7 @@
 
 public class Producer extends Thread 
 {
-	private CubbyHole box;
+	private BoundedBuffer box;
 	private int id;
 
 	/**
@@ -17,7 +17,7 @@ public class Producer extends Thread
 	 * @param c the shared box (CubbyHole) where data is deposited
 	 * @param n id of Producer
 	 */
-	public Producer(CubbyHole c, int n) 
+	public Producer(BoundedBuffer c, int n) 
 	{
 		super("Producer(" + n + ")");
 		box = c;
