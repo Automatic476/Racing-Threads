@@ -1,45 +1,64 @@
+import java.nio.BufferOverflowException;
+
 /**
  * Stores an integer value.  Used as a shared buffer by Producer &
  * 		Consumer threads to communicate.
  * (From Campione, Lesson 15)
  * 
- * @author Jason Green
- * @version Oct 12th, 2020
+ * @author Jason Green & Maggie Sweeney
+ * @version Oct 26th, 2020
  * 
  */	
 
 public class BoundedBuffer {
-	private int contents;
+
 	private boolean empty;
+	private boolean full; // for step 2
+	private int capacity; // max buffer size
+	private int count; // number of items in buffer
+	private int inIndex; // buffer pointer
+	private int outIndex; // buffer pointer
+	private int[] circularArray;
 
 	public BoundedBuffer(int n) {
 		empty = true;
-		int[] circularArray = new int[n];
-		int count = 0;
-		int capacity = 0;
-		int inIndex;
-		int outIndex;
+		full = false; // for step 2
+		capacity = n; 
+		circularArray = new int[capacity]; //set array to hold capacity
+	//	count = 0;
+		inIndex = 0;
+		outIndex = 0;
 	}
 
 	/**
-	 * Places value into cubbyhole
+	 * Places value into BoundedBuffer
 	 *
 	 * @param value to be deposited
 	 */
 	public synchronized void put(int value) {
-		try {
-			if (!empty) {
-				wait();
-			} else {
-				contents = value;
-				empty = false;
-				notifyAll();
+			
+			
+			while (full) { // buffer is full
+			
+				try {
+					wait();
+				}
+				catch (InterruptedException e) {
+					System.out.println("Error");
+				}
 			}
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-		}
+			circularArray[inIndex] = value; // store value
+			inIndex = ((inIndex++) % capacity); // implement circular array
+			count++; // update count
+			empty = false; // update to false
+			if(count == capacity) {
+				full = true; // update false
+			}
+			notifyAll();
+			}
 
-	}
+
+	
 
 	/**
 	 * Retrieves a value from cubbyhole
@@ -47,19 +66,23 @@ public class BoundedBuffer {
 	 * @return value retrieved
 	 */
 	public synchronized int get() {
-		try {
-			if (empty) {
-				wait();
-			} else {
-				empty = true;
-				notifyAll();
-				return contents;
-			}
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
 
-		}
-		return contents;
+		while(empty) { 
+
+	try {
+		wait();
+	} catch (InterruptedException e) {
+		System.err.println("Something all messed up in the get()");
 	}
-
+}
+			
+			int tmp = outIndex; // need to store temporary value
+			outIndex = ((outIndex++) % capacity); // implement circular array
+			count--; // update count
+			if(count == 0) {
+				empty = true;
+			}
+			notifyAll();
+			return circularArray[tmp];
+	}
 }

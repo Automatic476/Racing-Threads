@@ -12,12 +12,14 @@ public class PCTest
 {
 	public static void main(String[] args) throws InterruptedException
 	{
-		BoundedBuffer c = new BoundedBuffer(10);
-		Producer p1 = new Producer(c, 1);
-		Consumer c1 = new Consumer(c, 1);
-
-		p1.start();
+		BoundedBuffer bb = new BoundedBuffer(4);
+		Producer p1 = new Producer(bb, 1);
+		Consumer c1 = new Consumer(bb, 1);
 		c1.start();
+		p1.start();
+		
+		
+		
 
 		p1.join();
 		c1.join();

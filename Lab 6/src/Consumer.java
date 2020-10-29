@@ -17,10 +17,10 @@ public class Consumer extends Thread
 	 * @param c the shared box (CubbyHole) from which data is fetched
 	 * @param n id of Consumer
 	 */
-	public Consumer(BoundedBuffer c, int n) 
+	public Consumer(BoundedBuffer b, int n) 
 	{
 		super("Consumer(" + n + ")");
-		box = c;
+		box = b;
 		id = n;
 	}
 
